@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <h1 class="display-4 text-center">Face Emotion Detector Result</h1>
+        <!-- <a href="index.html">Show Emotion</a> -->
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/happy1.jfif" style="width: 123px;height: 123px;">
+            <h4 id="happy">Happy 25%</h4>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/sad.jfif" style="width: 123px;height: 123px;">
+            <h4 id="sad">Sad 25%</h4>
+        </div>
+
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/nuetral.jfif" style="width: 123px;height: 123px;">
+            <h4 id="neutral">Neutral 25%</h4>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/dusgusted.jfif" style="width: 123px;height: 123px;">
+            <h4 id="disgusted">Disgusted 25%</h4>
+        </div>
+
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/angry.jfif" style="width: 123px;height: 123px;">
+            <h4 id="angry">Angry 25%</h4>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/surpised.jfif" style="width: 123px;height: 123px;">
+            <h4 id="surprised">Angry 25%</h4>
+        </div>
+
+
+        
+    </div>
+</body>
+
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    var storedNames = JSON.parse(localStorage.getItem("stats"));
+    console.log('This is Array');
+    console.log(storedNames);
+    var sad = 0;
+    var neutral = 0;
+    var surprised = 0;
+    var happy = 0;
+    var angry = 0;
+    var disgusted = 0;
+    var fearful = 0;
+    if (storedNames) {
+        for (let index = 0; index < storedNames.length; index++) {
+            if (storedNames[index].sad != 0) {
+                sad++;
+            }
+
+            if (storedNames[index].neutral != 0) {
+                neutral++;
+            }
+
+            if (storedNames[index].surprised != 0) {
+                surprised++;
+            }
+
+            if (storedNames[index].happy != 0) {
+                happy++;
+            }
+
+            if (storedNames[index].angry != 0) {
+                angry++;
+            }
+
+            if (storedNames[index].disgusted != 0) {
+                disgusted++;
+            }
+
+            if (storedNames[index].fearful != 0) {
+                fearful++;
+            }
+        }
+
+    }
+
+    $("#happy").html('Happy ' + happy + '%');
+    $("#sad").html('Sad ' + sad + '%');
+    $("#neutral").html('Neutral ' + neutral + '%');
+    $("#surprised").html('Surprised ' + surprised + '%');
+    $("#angry").html('Angry ' + angry + '%');
+    $("#disgusted").html('Disgusted ' + disgusted + '%');
+    $("#fearful").html('Fearful ' + fearful + '%');
+    $("#checking").show();
+    localStorage.clear();
+</script>

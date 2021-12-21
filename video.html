@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <style>
+        canvas {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1 class="display-4 text-center">Face Emotion Detector</h1> <a href="index.html">Show Emotion</a>
+    </div>
+    <input id="file-input" class="fileuploader" type="file" accept="video/*">
+    <button type="button" id="video_length">Video Button</button>
+    <br>
+
+    <video width="720" controls style="display: none;"></video>
+    <br>
+    <div id="checking" style="display: none;">
+        <img src="./images/happy1.jfif" style="width: 123px;height: 123px;">
+        <h4 id="happy">Happy 25%</h4>
+        <br>
+        <img src="./images/sad.jfif" style="width: 123px;height: 123px;">
+        <h4 id="sad">Sad 25%</h4>
+        <br>
+        <img src="./images/nuetral.jfif" style="width: 123px;height: 123px;">
+        <h4 id="nuetral">Neutral 25%</h4>
+        <br>
+        <img src="./images/dusgusted.jfif" style="width: 123px;height: 123px;">
+        <h4 id="disgusted">Disgusted 25%</h4>
+        <br>
+        <img src="./images/angry.jfif" style="width: 123px;height: 123px;">
+        <h4 id="angry">Angry 25%</h4>
+        <br>
+        <img src="./images/fearful.jfif" style="width: 123px;height: 123px;">
+        <h4 id="fearful">Fearful 25%</h4>
+    </div>
+</body>
+
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+
+    jQuery(document).ready(function ($) {
+        // Click button to activate hidden file input
+        $('.fileuploader-btn').on('click', function () {
+            $('.fileuploader').click();
+        });
+
+        // Click above calls the open dialog box
+        // Once something is selected the change function will run
+        $('.fileuploader').change(function () {
+
+            // Create new FileReader as a variable
+            var reader = new FileReader();
+            // Onload Function will run after video has loaded
+            reader.onload = function (file) {
+                var fileContent = file.target.result;
+                $('body').append('<video src="' + fileContent + '" width="720" id"my_video" height="560" controls muted></video>');
+            }
+
+            // Get the selected video from Dialog
+            reader.readAsDataURL(this.files[0]);
+
+        });
+    });
+
+
+    var vid = document.createElement('video');
+    document.querySelector('#file-input').addEventListener('change', function () {
+        // create url to use as the src of the video
+        var fileURL = URL.createObjectURL(this.files[0]);
+        vid.src = fileURL;
+        // wait for duration to change from NaN to the actual duration
+        vid.ondurationchange = function () {
+            let duration = Math.round(this.duration);
+            alert(duration)
+        };
+    });
+
+    var storedNames = JSON.parse(localStorage.getItem("stats"));
+    console.log('This is Array');
+    console.log(storedNames);
+    var sad = 0;
+    var neutral = 0;
+    var surprised = 0;
+    var happy = 0;
+    var angry = 0;
+    var disgusted = 0;
+    var fearful = 0;
+    if (storedNames.length > 0) {
+        for (let index = 0; index < storedNames.length; index++) {
+            if (storedNames[index].sad != 0) {
+                sad++;
+            }
+
+            if (storedNames[index].neutral != 0) {
+                neutral++;
+            }
+
+            if (storedNames[index].surprised != 0) {
+                surprised++;
+            }
+
+            if (storedNames[index].happy != 0) {
+                happy++;
+            }
+
+            if (storedNames[index].angry != 0) {
+                angry++;
+            }
+
+            if (storedNames[index].disgusted != 0) {
+                disgusted++;
+            }
+
+            if (storedNames[index].fearful != 0) {
+                fearful++;
+            }
+        }
+
+    }
+
+    $("#happy").html('Happy ' + happy + '%');
+    $("#sad").html('Sad ' + sad + '%');
+    $("#neutral").html('Nuetral ' + neutral + '%');
+    $("#surprised").html('Surprised ' + surprised + '%');
+    $("#angry").html('Angry ' + angry + '%');
+    $("#disgusted").html('Disgusted ' + disgusted + '%');
+    $("#fearful").html('Fearful ' + fearful + '%');
+    $("#checking").show();
+    localStorage.clear();
+
+</script>

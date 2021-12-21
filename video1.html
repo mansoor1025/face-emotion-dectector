@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script defer src="/face-api.min.js"></script>
+    <!-- <script defer src="/script.js"></script> -->
+    <style>
+        #check {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1 class="display-4 text-center">Face Emotion Detector</h1>
+        <!-- <a href="index.html">Show Emotion</a> -->
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 custom-file mt-3 mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="customFile">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" id="video_div">
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+
+        </div>
+    </div>
+    <br>
+    <div class="row" style="display: none;">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/happy1.jfif" style="width: 123px;height: 123px;">
+            <h4 id="happy">Happy 25%</h4>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/sad.jfif" style="width: 123px;height: 123px;">
+            <h4 id="sad">Sad 25%</h4>
+        </div>
+
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/nuetral.jfif" style="width: 123px;height: 123px;">
+            <h4 id="nuetral">Neutral 25%</h4>
+        </div>
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/dusgusted.jfif" style="width: 123px;height: 123px;">
+            <h4 id="disgusted">Disgusted 25%</h4>
+        </div>
+
+
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+            <img src="./images/angry.jfif" style="width: 123px;height: 123px;">
+            <h4 id="angry">Angry 25%</h4>
+        </div>
+    </div>
+    <video id="video_our" width="720" height="560" style="margin-left: 317px;opacity:0;" autoplay muted></video>
+    <!-- <video width="720" controls style="display: none;"></video> -->
+    <br>
+    <!-- <div id="checking" style="display: none;">
+        <img src="./images/happy1.jfif" style="width: 123px;height: 123px;">
+        <h4 id="happy">Happy 25%</h4>
+        <br>
+        <img src="./images/sad.jfif" style="width: 123px;height: 123px;">
+        <h4 id="sad">Sad 25%</h4>
+        <br>
+        <img src="./images/nuetral.jfif" style="width: 123px;height: 123px;">
+        <h4 id="nuetral">Neutral 25%</h4>
+        <br>
+        <img src="./images/dusgusted.jfif" style="width: 123px;height: 123px;">
+        <h4 id="disgusted">Disgusted 25%</h4>
+        <br>
+        <img src="./images/angry.jfif" style="width: 123px;height: 123px;">
+        <h4 id="angry">Angry 25%</h4>
+        <br>
+        <img src="./images/fearful.jfif" style="width: 123px;height: 123px;">
+        <h4 id="fearful">Fearful 25%</h4>
+    </div> -->
+</body>
+
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    const video = document.getElementById('video_our');
+    const video2 = document.getElementById('video_div');
+    var emotion = [];
+    let duration = 0;
+    var vid = document.createElement("video");
+    $(".custom-file-input").on("change", function () {
+        var reader = new FileReader();
+        // Onload Function will run after video has loaded
+        reader.onload = function (file) {
+            var fileContent = file.target.result;
+            $('#video_div').append('<video src="' + fileContent + '" autoplay width="720" id"my_video" height="500" controls muted></video>');
+        }
+        // Get the selected video from Dialog
+        reader.readAsDataURL(this.files[0]);
+        var fileURL = URL.createObjectURL(this.files[0]);
+
+        vid.src = fileURL;
+        // wait for duration to change from NaN to the actual duration
+        vid.ondurationchange = function () {
+            duration = Math.round(this.duration) * 1000;
+            // check(duration)
+        };
+
+        // all promise be defined
+        Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+            faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+            faceapi.nets.faceExpressionNet.loadFromUri('/models')
+        ]).then(startVideo)
+
+        video.addEventListener('play', () => {
+            // create canvas from media  
+            const canvas = faceapi.createCanvasFromMedia(video)
+            document.body.append(canvas)
+            // create display canvas
+            const displaySize = { width: video.width, height: video.height }
+            faceapi.matchDimensions(canvas, displaySize);
+            setInterval(async () => {
+                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+                const resizedDetections = faceapi.resizeResults(detections, displaySize)
+                // create 2d canvas
+                canvas.getContext('2d').clearRect(80, 1, canvas.width, canvas.height)
+                // create drawDetections canvas
+                faceapi.draw.drawDetections(canvas, resizedDetections)
+                // create drawFaceLandmarks canvas
+                faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+                // create drawFaceExpressions canvas
+                faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+                console.log('=======================');
+                let data = {
+                    sad: Math.round(detections[0].expressions.disgusted),
+                    disgusted: Math.round(detections[0].expressions.disgusted),
+                    neutral: Math.round(detections[0].expressions.neutral),
+                    fearful: Math.round(detections[0].expressions.fearful),
+                    happy: Math.round(detections[0].expressions.happy),
+                    surprised: Math.round(detections[0].expressions.surprised),
+                    angry: Math.round(detections[0].expressions.angry),
+                }
+                emotion.push(data);
+                // console.log(emotion);
+
+            }, 100)
+
+            setTimeout(function () {
+                localStorage.setItem("stats", JSON.stringify(emotion));
+                location.href = 'stats.html';
+            }, duration);
+            return
+
+
+        })
+        // var fileName = $(this).val().split("\\").pop();
+        // $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+
+
+    function startVideo() {
+        navigator.getUserMedia(
+            { video: {} },
+            stream => video.srcObject = stream,
+            err => console.error(err)
+        )
+
+    }
+</script>
